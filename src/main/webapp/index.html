@@ -1,0 +1,118 @@
+<HTML>
+<HEAD>
+    <title>index</title></HEAD>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<BODY>
+<form id="add_new">
+    <label for="form_description">Add new item</label>
+    <input type="text" class="form-control" id="form_description" name="description">
+    <button type="submit" class="btn btn-primary" onclick="addNewItem()">Submit</button>
+</form>
+
+<form id="show_done">
+    <label for="check_done">Show done</label>
+    <input type="checkbox" class="form-check" id="check_done" onchange="loadItems(checked)">
+</form>
+
+<table id="items-table" class="table table-dark">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>DESCRIPTION</th>
+        <th>CREATED</th>
+        <th>IS_DONE</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    function addNewItem() {
+        const form = document.querySelector("#add_new")
+        const data = {
+            "description": form.querySelector('input[name = "description"]').value
+        }
+
+        const request = new XMLHttpRequest();
+        request.open("post", "/todo/item.do")
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        request.send(JSON.stringify(data))
+    }
+
+
+    function removeChildren(tableBody) {
+        while (tableBody.firstChild) {
+            tableBody.removeChild(tableBody.firstChild)
+        }
+    }
+
+    function populateTable(json) {
+        const tableBody = document.querySelector("#items-table > tbody");
+        removeChildren(tableBody);
+
+        json.forEach((item) => {
+                const tr = document.createElement("tr");
+
+                const td_id = document.createElement("td");
+                td_id.textContent = item.id;
+                const td_desc = document.createElement("td");
+                td_desc.textContent = item.description;
+                const td_created = document.createElement("td");
+                td_created.textContent = item.created;
+                const checkBoxDone = document.createElement("INPUT");
+                checkBoxDone.setAttribute("type", "checkbox");
+                checkBoxDone.setAttribute("name", "city");
+                checkBoxDone.setAttribute("value", "London");
+                checkBoxDone.checked = item.done;
+                checkBoxDone.onchange = event => {
+                    item.done = event.returnValue
+                    onChangeTaskDone(item);
+                }
+
+                tr.append(td_id, td_desc, td_created, checkBoxDone);
+                tableBody.appendChild(tr);
+            }
+        )
+    }
+
+    function onChangeTaskDone(item) {
+        const request = new XMLHttpRequest();
+        request.open("post", "/todo/item.do")
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        request.send(JSON.stringify(item))
+    }
+
+    function loadItems(include_done) {
+        const request = new XMLHttpRequest();
+        request.set
+        request.open("get", `/todo/item.do?shows_done=${include_done}`)
+        request.onload = () => {
+            try {
+                const json = JSON.parse(request.responseText);
+                populateTable(json);
+            } catch (e) {
+                console.warn('Could not load Items!')
+            }
+        }
+        request.send();
+    }
+
+    document.onload = loadItems(document.querySelector("#check_done").checked);
+
+</script>
+
+</BODY>
+</HTML>
