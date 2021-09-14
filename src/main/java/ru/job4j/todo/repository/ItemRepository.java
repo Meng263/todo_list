@@ -2,13 +2,11 @@ package ru.job4j.todo.repository;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.ItemQuery;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ItemRepository implements EntityRepository<Item> {
     private static volatile ItemRepository instance;
@@ -41,55 +39,55 @@ public class ItemRepository implements EntityRepository<Item> {
     }
 
     private Item create(Item item) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.save(item);
-        session.getTransaction().commit();
-        session.close();
+        executeOnSession(session -> session.save(item));
         return item;
     }
 
     private Item update(Item item) {
-        Item result;
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.update(item);
-        session.getTransaction().commit();
-        result = session.get(Item.class, item.getId());
-        session.close();
-        return result;
+        return executeOnSession(session -> {
+                    session.update(item);
+                    return session.get(Item.class, item.getId());
+                }
+        );
     }
 
     @Override
     public void delete(long id) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Item item = new Item();
-        item.setId(id);
-        session.delete(item);
-        session.getTransaction().commit();
-        session.close();
+        executeOnSession(session -> {
+                    Item item = new Item();
+                    item.setId(id);
+                    session.delete(item);
+                    return item;
+                }
+        );
     }
 
     @Override
     public List<Item> getAll(ItemQuery query) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        List result = session.createQuery("from ru.job4j.todo.model.Item where done = :done or done = false")
-                .setParameter("done", query.isShowsDone())
-                .list();
-        session.getTransaction().commit();
-        session.close();
-        return result;
+        return executeOnSession(session ->
+                session.createQuery("from ru.job4j.todo.model.Item where done = :done or done = false")
+                        .setParameter("done", query.isShowsDone())
+                        .list()
+        );
     }
 
     @Override
     public Item findById(long id) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Item result = session.get(Item.class, id);
-        session.getTransaction().commit();
-        session.close();
-        return result;
+        return executeOnSession(session -> session.get(Item.class, id));
+    }
+
+    private <T> T executeOnSession(final Function<Session, T> command) {
+        final Session session = sessionFactory.openSession();
+        final Transaction transaction = session.beginTransaction();
+        try {
+            T rsl = command.apply(session);
+            transaction.commit();
+            return rsl;
+        } catch (final Exception e) {
+            session.getTransaction().rollback();
+            throw e;
+        } finally {
+            session.close();
+        }
     }
 }
