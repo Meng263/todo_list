@@ -35,8 +35,8 @@ function populateTable(json) {
             checkBoxDone.setAttribute("name", "city");
             checkBoxDone.setAttribute("value", "London");
             checkBoxDone.checked = item.done;
-            checkBoxDone.onchange = event => {
-                item.done = event.returnValue
+            checkBoxDone.onchange = (event) => {
+                item.done = checkBoxDone.checked
                 onChangeTaskDone(item);
             }
 
@@ -51,6 +51,9 @@ function onChangeTaskDone(item) {
     request.open("post", "/todo/item.do")
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.send(JSON.stringify(item))
+    request.onload = () => {
+        refreshTableBody();
+    }
 }
 
 function loadItems(include_done) {
@@ -69,5 +72,9 @@ function loadItems(include_done) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    refreshTableBody();
+});
+
+function refreshTableBody() {
     loadItems(document.querySelector("#check_done").checked);
-})
+}
