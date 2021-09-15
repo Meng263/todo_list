@@ -5,12 +5,12 @@ import ru.job4j.todo.model.ItemQuery;
 
 import java.util.List;
 
-public interface EntityRepository<ENTITY> {
-    ENTITY save(Item item);
+public interface EntityRepository<E> {
+    E save(Item item);
 
     void delete(long id);
 
-    List<ENTITY> getAll(ItemQuery query);
+    List<E> getAll(ItemQuery query);
 
-    ENTITY findById(long id);
+    E findById(long id);
 }

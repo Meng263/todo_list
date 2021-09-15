@@ -3,6 +3,9 @@ package ru.job4j.todo.repository;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.ItemQuery;
 
@@ -10,7 +13,21 @@ import java.util.List;
 import java.util.function.Function;
 
 public class ItemRepository implements EntityRepository<Item> {
-    private final SessionFactory sessionFactory = HibernateSupplier.getSessionFactory();
+    private ItemRepository() {
+    }
+
+    private static class ItemRepositoryHolder {
+        public static final ItemRepository instance = new ItemRepository();
+    }
+
+    public static ItemRepository getInstance() {
+        return ItemRepositoryHolder.instance;
+    }
+
+    final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+            .configure().build();
+
+    private final SessionFactory sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
 
     @Override
     public Item save(Item item) {

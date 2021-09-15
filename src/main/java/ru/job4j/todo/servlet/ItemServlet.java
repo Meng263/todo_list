@@ -15,8 +15,8 @@ import java.io.PrintWriter;
 import java.util.Date;
 
 public class ItemServlet extends HttpServlet {
-    private final ItemRepository repository = new ItemRepository();
-    private Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private final ItemRepository repository = ItemRepository.getInstance();
+    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
