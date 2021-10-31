@@ -6,6 +6,7 @@ import org.hibernate.Transaction;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import ru.job4j.todo.migration.FlywayMigration;
 import ru.job4j.todo.model.Item;
 import ru.job4j.todo.model.ItemQuery;
 
@@ -14,6 +15,7 @@ import java.util.function.Function;
 
 public class ItemRepository implements EntityRepository<Item> {
     private ItemRepository() {
+        FlywayMigration.getInstance().migrate();
     }
 
     private static class ItemRepositoryHolder {
