@@ -19,7 +19,10 @@ public abstract class UpsertRepository<E extends WithId> implements EntityReposi
 
     protected abstract E update(E entity);
 
-    protected abstract E create(E entity);
+    private E create(E entity) {
+        executeOnSession(session -> session.save(entity));
+        return entity;
+    }
 
     protected final <T> T executeOnSession(final Function<Session, T> command) {
         final Session session = HibernateUtility.getSessionFactory().openSession();

@@ -27,12 +27,6 @@ public class UserRepository extends UpsertRepository<User> {
     }
 
     @Override
-    protected User create(User entity) {
-        executeOnSession(session -> session.save(entity));
-        return entity;
-    }
-
-    @Override
     public void delete(long id) {
         executeOnSession(session -> {
                     User user = new User();

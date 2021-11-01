@@ -18,12 +18,6 @@ public class ItemRepository extends UpsertRepository<Item> {
     }
 
     @Override
-    protected final Item create(Item item) {
-        executeOnSession(session -> session.save(item));
-        return item;
-    }
-
-    @Override
     protected final Item update(Item item) {
         return executeOnSession(session -> {
                     session.update(item);
