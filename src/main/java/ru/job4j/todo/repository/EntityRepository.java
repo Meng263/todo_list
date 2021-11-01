@@ -1,16 +1,16 @@
 package ru.job4j.todo.repository;
 
-import ru.job4j.todo.model.Item;
-import ru.job4j.todo.model.ItemQuery;
+import ru.job4j.todo.model.WithId;
 
 import java.util.List;
+import java.util.Map;
 
-public interface EntityRepository<E> {
-    E save(Item item);
+public interface EntityRepository<E extends WithId> {
+    E save(E entity);
 
     void delete(long id);
 
-    List<E> getAll(ItemQuery query);
+    List<E> getAll(Map<String, Object> options);
 
     E findById(long id);
 }

@@ -5,10 +5,10 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements WithId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private String name;
     private String email;
     private String password;
@@ -29,11 +29,12 @@ public class User {
     public User() {
     }
 
-    public int getId() {
+    @Override
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

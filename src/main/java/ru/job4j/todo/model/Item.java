@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "items")
-public class Item {
+public class Item implements WithId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -15,6 +15,7 @@ public class Item {
     private Date created;
     private boolean done;
 
+    @Override
     public long getId() {
         return id;
     }
