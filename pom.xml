@@ -7,7 +7,7 @@
   <groupId>ru.job4j</groupId>
   <artifactId>job4j_todo</artifactId>
   <version>1.0</version>
-  <packaging>war</packaging>
+  <packaging>pom</packaging>
 
   <name>job4j_todo</name>
 
@@ -16,6 +16,11 @@
     <maven.compiler.source>14</maven.compiler.source>
     <maven.compiler.target>14</maven.compiler.target>
   </properties>
+
+  <modules>
+    <module>todo_app</module>
+    <module>hibernate_experements</module>
+  </modules>
 
   <dependencies>
     <dependency>
