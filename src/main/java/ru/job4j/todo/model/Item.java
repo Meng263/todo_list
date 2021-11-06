@@ -13,6 +13,10 @@ public class Item implements WithId {
     private String description;
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User author;
+
     private boolean done;
 
     @Override
@@ -46,6 +50,14 @@ public class Item implements WithId {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     @Override

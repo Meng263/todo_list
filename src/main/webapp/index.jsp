@@ -1,3 +1,6 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<!doctype html>
 <HTML>
 <HEAD>
     <title>index</title>
@@ -16,12 +19,24 @@
     <script src="script.js"></script>
 </HEAD>
 <BODY>
+
+<div class="row">
 <form id="add_new">
     <label for="form_description">Add new item</label>
     <input type="text" class="form-control" id="form_description" name="description">
-    <button type="submit" class="btn btn-primary" onclick="addNewItem()">Submit</button>
+    <button type="submit" class="btn btn-primary" onclick='addNewItem("<c:out value="${sessionScope.user.id}"/>")'>Submit</button>
 </form>
-
+    <li class="nav-item">
+        <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">
+            <c:choose>
+                <c:when test="${sessionScope.user != null}">
+                    <c:out value="${sessionScope.user.name}"/> | Сменить пользователя
+                </c:when>
+                <c:otherwise>Войти</c:otherwise>
+            </c:choose>
+        </a>
+    </li>
+</div>
 <form id="show_done">
     <label for="check_done">Show done</label>
     <input type="checkbox" class="form-check" id="check_done" onchange="loadItems(checked)">
@@ -32,6 +47,7 @@
     <tr>
         <th>ID</th>
         <th>DESCRIPTION</th>
+        <th>AUTHOR</th>
         <th>CREATED</th>
         <th>IS_DONE</th>
     </tr>

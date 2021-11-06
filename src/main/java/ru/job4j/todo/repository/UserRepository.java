@@ -45,6 +45,16 @@ public class UserRepository extends UpsertRepository<User> {
         );
     }
 
+    public User findUserByEmail(String email) {
+        return executeOnSession(session ->
+                session.createQuery("from ru.job4j.todo.model.User where email=:email", User.class)
+                        .setParameter("email", email)
+                        .list().stream()
+                        .findFirst()
+                        .orElse(null)
+        );
+    }
+
     @Override
     public User findById(long id) {
         return executeOnSession(session -> session.get(User.class, id));

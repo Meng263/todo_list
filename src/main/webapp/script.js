@@ -1,7 +1,9 @@
-function addNewItem() {
+function addNewItem(userId) {
+    console.log(`user id is ${userId}`)
     const form = document.querySelector("#add_new")
     const data = {
-        "description": form.querySelector('input[name = "description"]').value
+        "description": form.querySelector('input[name = "description"]').value,
+        "author": {"id": userId}
     }
 
     const request = new XMLHttpRequest();
@@ -9,7 +11,6 @@ function addNewItem() {
     request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     request.send(JSON.stringify(data))
 }
-
 
 function removeChildren(tableBody) {
     while (tableBody.firstChild) {
@@ -26,8 +27,12 @@ function populateTable(json) {
 
             const td_id = document.createElement("td");
             td_id.textContent = item.id;
+
             const td_desc = document.createElement("td");
             td_desc.textContent = item.description;
+            const td_author = document.createElement("td");
+            td_author.textContent = item.author.name;
+
             const td_created = document.createElement("td");
             td_created.textContent = item.created;
             const checkBoxDone = document.createElement("INPUT");
@@ -40,7 +45,7 @@ function populateTable(json) {
                 onChangeTaskDone(item);
             }
 
-            tr.append(td_id, td_desc, td_created, checkBoxDone);
+            tr.append(td_id, td_desc, td_author, td_created, checkBoxDone);
             tableBody.appendChild(tr);
         }
     )
