@@ -16,5 +16,7 @@
         <property name="hibernate.use_sql_comments">true</property>
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL10Dialect</property>
 
+        <mapping class="ru.job4j.schemas.cars.model.ModelCar"/>
+        <mapping class="ru.job4j.schemas.cars.model.BrandCar"/>
     </session-factory>
 </hibernate-configuration>
