@@ -6,15 +6,20 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "items")
-public class Item {
+public class Item implements WithId {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String description;
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User author;
+
     private boolean done;
 
+    @Override
     public long getId() {
         return id;
     }
@@ -45,6 +50,14 @@ public class Item {
 
     public void setDone(boolean done) {
         this.done = done;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     @Override

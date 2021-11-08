@@ -1,18 +1,11 @@
 package ru.job4j.todo.repository;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.MetadataSources;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import ru.job4j.todo.model.Item;
-import ru.job4j.todo.model.ItemQuery;
 
 import java.util.List;
-import java.util.function.Function;
+import java.util.Map;
 
-public class ItemRepository implements EntityRepository<Item> {
+public class ItemRepository extends UpsertRepository<Item> {
     private ItemRepository() {
     }
 
@@ -24,26 +17,8 @@ public class ItemRepository implements EntityRepository<Item> {
         return ItemRepositoryHolder.instance;
     }
 
-    final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-            .configure().build();
-
-    private final SessionFactory sessionFactory = new MetadataSources(registry).buildMetadata().buildSessionFactory();
-
     @Override
-    public Item save(Item item) {
-        if (item.getId() == 0) {
-            return create(item);
-        } else {
-            return update(item);
-        }
-    }
-
-    private Item create(Item item) {
-        executeOnSession(session -> session.save(item));
-        return item;
-    }
-
-    private Item update(Item item) {
+    protected final Item update(Item item) {
         return executeOnSession(session -> {
                     session.update(item);
                     return session.get(Item.class, item.getId());
@@ -63,10 +38,10 @@ public class ItemRepository implements EntityRepository<Item> {
     }
 
     @Override
-    public List<Item> getAll(ItemQuery query) {
+    public List<Item> getAll(Map<String, Object> options) {
         return executeOnSession(session ->
                 session.createQuery("from ru.job4j.todo.model.Item where done = :done or done = false")
-                        .setParameter("done", query.isShowsDone())
+                        .setParameter("done", options.get("is_shows_done"))
                         .list()
         );
     }
@@ -74,20 +49,5 @@ public class ItemRepository implements EntityRepository<Item> {
     @Override
     public Item findById(long id) {
         return executeOnSession(session -> session.get(Item.class, id));
-    }
-
-    private <T> T executeOnSession(final Function<Session, T> command) {
-        final Session session = sessionFactory.openSession();
-        final Transaction transaction = session.beginTransaction();
-        try {
-            T rsl = command.apply(session);
-            transaction.commit();
-            return rsl;
-        } catch (final Exception e) {
-            session.getTransaction().rollback();
-            throw e;
-        } finally {
-            session.close();
-        }
     }
 }
