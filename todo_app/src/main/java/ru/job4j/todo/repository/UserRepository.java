@@ -49,9 +49,7 @@ public class UserRepository extends UpsertRepository<User> {
         return executeOnSession(session ->
                 session.createQuery("from ru.job4j.todo.model.User where email=:email", User.class)
                         .setParameter("email", email)
-                        .list().stream()
-                        .findFirst()
-                        .orElse(null)
+                        .uniqueResult()
         );
     }
 
