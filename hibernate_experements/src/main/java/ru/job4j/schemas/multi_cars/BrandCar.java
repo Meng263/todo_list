@@ -10,12 +10,12 @@ import java.util.Objects;
 public class BrandCar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private int id;
     @Column(unique = true)
-    String name;
+    private String name;
 
     @OneToMany(mappedBy = "brand")
-    List<ModelCar> models = new ArrayList<>();
+    private List<ModelCar> models = new ArrayList<>();
 
     public static BrandCar of(String name) {
         BrandCar role = new BrandCar();

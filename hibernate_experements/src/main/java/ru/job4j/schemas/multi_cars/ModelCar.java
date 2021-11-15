@@ -8,14 +8,14 @@ import java.util.Objects;
 public class ModelCar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private int id;
 
     @Column(unique = true)
-    String name;
+    private String name;
 
     @ManyToOne()
     @JoinColumn(name = "brand_id")
-    BrandCar brand;
+    private BrandCar brand;
 
     public static ModelCar of(String name) {
         ModelCar role = new ModelCar();

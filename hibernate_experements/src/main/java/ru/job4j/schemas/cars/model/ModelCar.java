@@ -8,10 +8,10 @@ import java.util.Objects;
 public class ModelCar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+    private int id;
 
     @Column(unique = true)
-    String name;
+    private String name;
 
     public static ModelCar of(String name) {
         ModelCar role = new ModelCar();
