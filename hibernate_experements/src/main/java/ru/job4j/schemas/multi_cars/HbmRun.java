@@ -29,7 +29,7 @@ public class HbmRun {
         } finally {
             StandardServiceRegistryBuilder.destroy(registry);
         }
-        brandCars.forEach(brandCar -> brandCar.models.forEach(System.out::println));
+        brandCars.forEach(brandCar -> brandCar.getModels().forEach(System.out::println));
     }
 
 }
