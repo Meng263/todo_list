@@ -1,4 +1,4 @@
-package ru.job4j.schemas.cars.model;
+package ru.job4j.schemas.multi_cars;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -12,6 +12,10 @@ public class ModelCar {
 
     @Column(unique = true)
     private String name;
+
+    @ManyToOne()
+    @JoinColumn(name = "brand_id")
+    private BrandCar brand;
 
     public static ModelCar of(String name) {
         ModelCar role = new ModelCar();
@@ -35,6 +39,14 @@ public class ModelCar {
         this.name = name;
     }
 
+    public BrandCar getBrand() {
+        return brand;
+    }
+
+    public void setBrand(BrandCar brand) {
+        this.brand = brand;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -46,5 +58,14 @@ public class ModelCar {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "ModelCar{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", brand=" + brand +
+                '}';
     }
 }

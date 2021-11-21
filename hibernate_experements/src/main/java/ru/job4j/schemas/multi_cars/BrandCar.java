@@ -1,22 +1,30 @@
-package ru.job4j.schemas.cars.model;
+package ru.job4j.schemas.multi_cars;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
-@Table(name = "models")
-public class ModelCar {
+@Table(name = "brands")
+public class BrandCar {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     @Column(unique = true)
     private String name;
 
-    public static ModelCar of(String name) {
-        ModelCar role = new ModelCar();
+    @OneToMany(mappedBy = "brand")
+    private List<ModelCar> models = new ArrayList<>();
+
+    public static BrandCar of(String name) {
+        BrandCar role = new BrandCar();
         role.name = name;
         return role;
+    }
+
+    public boolean addModel(ModelCar model) {
+        return models.add(model);
     }
 
     public int getId() {
@@ -35,12 +43,20 @@ public class ModelCar {
         this.name = name;
     }
 
+    public List<ModelCar> getModels() {
+        return models;
+    }
+
+    public void setModels(List<ModelCar> models) {
+        this.models = models;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ModelCar modelCar = (ModelCar) o;
-        return id == modelCar.id;
+        BrandCar brandCar = (BrandCar) o;
+        return id == brandCar.id;
     }
 
     @Override
