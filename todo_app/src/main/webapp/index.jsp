@@ -21,11 +21,6 @@
 <BODY>
 
 <div class="row">
-<form id="add_new">
-    <label for="form_description">Add new item</label>
-    <input type="text" class="form-control" id="form_description" name="description">
-    <button type="submit" class="btn btn-primary" onclick='addNewItem("<c:out value="${sessionScope.user.id}"/>")'>Submit</button>
-</form>
     <li class="nav-item">
         <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">
             <c:choose>
@@ -36,6 +31,14 @@
             </c:choose>
         </a>
     </li>
+
+    <form id="add_new">
+        <label for="form_description">Add new item</label>
+        <input type="text" class="form-control" id="form_description" name="description">
+        <input list="category">
+        <datalist id ="category"></datalist>
+        <button type="submit" class="btn btn-primary" onclick='addNewItem("<c:out value="${sessionScope.user.id}"/>")'>Submit</button>
+    </form>
 </div>
 <form id="show_done">
     <label for="check_done">Show done</label>

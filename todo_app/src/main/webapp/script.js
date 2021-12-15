@@ -65,7 +65,6 @@ function onChangeTaskDone(item) {
 
 function loadItems(include_done) {
     const request = new XMLHttpRequest();
-    request.set
     request.open("get", `/todo/item.do?shows_done=${include_done}`)
     request.onload = () => {
         try {
@@ -80,7 +79,28 @@ function loadItems(include_done) {
 
 document.addEventListener("DOMContentLoaded", () => {
     refreshTableBody();
+    loadOptions();
 });
+
+function loadOptions() {
+    const request = new XMLHttpRequest();
+    request.open("get", `/todo/category.do`)
+    request.onload = () => {
+        try {
+            const json = JSON.parse(request.responseText);
+            let list = document.querySelector("#category");
+            json.forEach((elem) => {
+                    let option = document.createElement('option');
+                    option.value = elem.name;
+                    list.appendChild(option);
+                }
+            )
+        } catch (e) {
+            console.warn('Could not load Categories!')
+        }
+    }
+    request.send();
+}
 
 function refreshTableBody() {
     loadItems(document.querySelector("#check_done").checked);

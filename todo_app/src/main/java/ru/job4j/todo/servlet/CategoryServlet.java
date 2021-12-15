@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
 public class CategoryServlet extends HttpServlet {
     private final CategoryRepository repository = CategoryRepository.getInstance();
@@ -23,7 +22,7 @@ public class CategoryServlet extends HttpServlet {
         resp.setCharacterEncoding("UTF-8");
 
         try (PrintWriter writer = resp.getWriter()) {
-            writer.write(gson.toJson(repository.getAll(Map.of())));
+            writer.write(gson.toJson(repository.getAll()));
             writer.flush();
         }
     }
