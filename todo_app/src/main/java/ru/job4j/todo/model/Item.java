@@ -1,8 +1,12 @@
 package ru.job4j.todo.model;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "items")
@@ -16,6 +20,10 @@ public class Item implements WithId {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User author;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @Fetch(FetchMode.JOIN)
+    private Set<Category> categories;
 
     private boolean done;
 
@@ -58,6 +66,14 @@ public class Item implements WithId {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public Set<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(Set<Category> categories) {
+        this.categories = categories;
     }
 
     @Override

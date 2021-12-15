@@ -30,6 +30,10 @@ function populateTable(json) {
 
             const td_desc = document.createElement("td");
             td_desc.textContent = item.description;
+
+            const td_categories = document.createElement("td");
+            td_categories.textContent = item.categories.map(value => value.name).join(", ");
+
             const td_author = document.createElement("td");
             td_author.textContent = item.author.name;
 
@@ -37,15 +41,13 @@ function populateTable(json) {
             td_created.textContent = item.created;
             const checkBoxDone = document.createElement("INPUT");
             checkBoxDone.setAttribute("type", "checkbox");
-            checkBoxDone.setAttribute("name", "city");
-            checkBoxDone.setAttribute("value", "London");
             checkBoxDone.checked = item.done;
             checkBoxDone.onchange = (event) => {
                 item.done = checkBoxDone.checked
                 onChangeTaskDone(item);
             }
 
-            tr.append(td_id, td_desc, td_author, td_created, checkBoxDone);
+            tr.append(td_id, td_desc, td_categories, td_author, td_created, checkBoxDone);
             tableBody.appendChild(tr);
         }
     )

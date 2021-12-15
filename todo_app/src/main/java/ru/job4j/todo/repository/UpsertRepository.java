@@ -5,6 +5,8 @@ import org.hibernate.Transaction;
 import ru.job4j.todo.hibernate.HibernateUtility;
 import ru.job4j.todo.model.WithId;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Function;
 
 public abstract class UpsertRepository<E extends WithId> implements EntityRepository<E> {
@@ -22,6 +24,11 @@ public abstract class UpsertRepository<E extends WithId> implements EntityReposi
     private E create(E entity) {
         executeOnSession(session -> session.save(entity));
         return entity;
+    }
+
+    @Override
+    public List<E> getAll() {
+        return getAll(Collections.emptyMap());
     }
 
     protected final <T> T executeOnSession(final Function<Session, T> command) {

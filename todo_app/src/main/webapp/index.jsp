@@ -47,6 +47,7 @@
     <tr>
         <th>ID</th>
         <th>DESCRIPTION</th>
+        <th>CATEGORIES</th>
         <th>AUTHOR</th>
         <th>CREATED</th>
         <th>IS_DONE</th>
