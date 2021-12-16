@@ -1,9 +1,13 @@
 function addNewItem(userId) {
     console.log(`user id is ${userId}`)
     const form = document.querySelector("#add_new")
+    let categoriesElem = form.querySelector("#category");
+    let categories = Array.apply(null, categoriesElem.options).filter(x => x.selected).map(x => x.id);
+
     const data = {
         "description": form.querySelector('input[name = "description"]').value,
-        "author": {"id": userId}
+        "author": {"id": userId},
+        "categories": categories.map(id => ({ id }))
     }
 
     const request = new XMLHttpRequest();
@@ -92,6 +96,8 @@ function loadOptions() {
             json.forEach((elem) => {
                     let option = document.createElement('option');
                     option.value = elem.name;
+                    option.id = elem.id;
+                    option.label = elem.name;
                     list.appendChild(option);
                 }
             )
