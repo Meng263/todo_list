@@ -12,15 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 public class ItemServlet extends HttpServlet {
-    private final ItemRepository repository = ItemRepository.getInstance();
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        final ItemRepository repository = ItemRepository.getInstance();
+        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
         boolean isShowsDone = Boolean.parseBoolean(req.getParameter("shows_done"));
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
@@ -33,6 +31,8 @@ public class ItemServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        final ItemRepository repository = ItemRepository.getInstance();
+        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Item item = gson.fromJson(req.getReader(), Item.class);
         item.setCreated(new Date());
         repository.save(item);

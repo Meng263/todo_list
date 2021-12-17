@@ -13,11 +13,10 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 public class CategoryServlet extends HttpServlet {
-    private final CategoryRepository repository = CategoryRepository.getInstance();
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        final CategoryRepository repository = CategoryRepository.getInstance();
         resp.setContentType("application/json");
         resp.setCharacterEncoding("UTF-8");
 
@@ -29,6 +28,8 @@ public class CategoryServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        final CategoryRepository repository = CategoryRepository.getInstance();
         Category category = gson.fromJson(req.getReader(), Category.class);
         repository.save(category);
     }
