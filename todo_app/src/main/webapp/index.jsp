@@ -21,12 +21,16 @@
 <BODY>
 
 <div class="row">
-<form id="add_new">
-    <label for="form_description">Add new item</label>
-    <input type="text" class="form-control" id="form_description" name="description">
-    <button type="submit" class="btn btn-primary" onclick='addNewItem("<c:out value="${sessionScope.user.id}"/>")'>Submit</button>
-</form>
-    <li class="nav-item">
+    <form id="add_new" style="padding-left: 30px">
+        <label for="form_description">Add new item</label>
+        <input type="text" class="form-control" id="form_description" name="description" required>
+        <label class="col-form-label col-sm-3" style="font-weight: 900" for="category">Список категорий</label>
+        <select class="form-control" name="category" id="category" multiple required>
+        </select>
+        <button type="submit" class="btn btn-primary" onclick='addNewItem("<c:out value="${sessionScope.user.id}"/>")'>Submit</button>
+    </form>
+
+    <li class="nav-item" style="position: fixed; right: 0px">
         <a class="nav-link" href="<%=request.getContextPath()%>/login.jsp">
             <c:choose>
                 <c:when test="${sessionScope.user != null}">
@@ -37,7 +41,7 @@
         </a>
     </li>
 </div>
-<form id="show_done">
+<form id="show_done" style="padding-left: 10px">
     <label for="check_done">Show done</label>
     <input type="checkbox" class="form-check" id="check_done" onchange="loadItems(checked)">
 </form>
@@ -47,6 +51,7 @@
     <tr>
         <th>ID</th>
         <th>DESCRIPTION</th>
+        <th>CATEGORIES</th>
         <th>AUTHOR</th>
         <th>CREATED</th>
         <th>IS_DONE</th>

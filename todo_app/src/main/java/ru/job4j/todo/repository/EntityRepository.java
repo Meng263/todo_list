@@ -12,5 +12,7 @@ public interface EntityRepository<E extends WithId> {
 
     List<E> getAll(Map<String, Object> options);
 
+    List<E> getAll();
+
     E findById(long id);
 }
